@@ -5,7 +5,12 @@
   <groupId>com.craftedbytes.hazelcast</groupId>
   <artifactId>hazeldap</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+
+  <modules>
+    <module>hazeldap-client</module>
+  </modules>
+
+  <packaging>pom</packaging>
 
   <name>hazeldap</name>
   <url>http://maven.apache.org</url>
