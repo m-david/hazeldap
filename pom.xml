@@ -8,6 +8,8 @@
 
   <modules>
     <module>hazeldap-client</module>
+    <module>hazeldap-server</module>
+    <module>hazeldap-common</module>
   </modules>
 
   <packaging>pom</packaging>
