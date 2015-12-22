@@ -1,41 +1,25 @@
 package com.craftedbytes.hazelcast.ldap;
 
-import static org.springframework.ldap.query.LdapQueryBuilder.query;
-
+import com.craftedbytes.hazelcast.UserStore;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
-import com.craftedbytes.hazelcast.UserStore;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.filter.Filter;
-import org.springframework.ldap.filter.WhitespaceWildcardsFilter;
 
-import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
-import java.util.Collections;
 import java.util.List;
 
-public class UserStoreImpl implements UserStore {
+/**
+ * A UserStore that connects to an LDAP server by use of the Spring LdapTemplate
+ */
+public class LdapUserStore implements UserStore {
+
     private LdapTemplate ldapTemplate;
 
     public void setLdapTemplate(LdapTemplate ldapTemplate) {
         this.ldapTemplate = ldapTemplate;
-    }
-
-    public List<String> getAllPersonNames() {
-
-        List<String> search = ldapTemplate
-                .search(query().where("objectclass").is("inetOrgPerson"), new AttributesMapper<String>() {
-                    public String mapFromAttributes(Attributes attrs)
-                            throws NamingException {
-                        return attrs.get("cn").get().toString();
-                    }
-                });
-
-
-        return search;
     }
 
     public boolean authenticate(String username, String password) {
@@ -49,7 +33,6 @@ public class UserStoreImpl implements UserStore {
         return authOk;
 
     }
-
 
     public List<String> getRoles(String username) {
 

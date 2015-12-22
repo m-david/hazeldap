@@ -86,7 +86,7 @@
 
     <ldap:ldap-template id="ldapTemplate"/>
 
-    <bean id="userStore" class="com.craftedbytes.hazelcast.ldap.UserStoreImpl">
+    <bean id="userStore" class="com.craftedbytes.hazelcast.ldap.LdapUserStore">
         <property name="ldapTemplate" ref="ldapTemplate"/>
     </bean>
 
