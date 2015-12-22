@@ -1,0 +1,23 @@
+{
+  "id": "dit",
+  "dit": {
+    "dc=craftedbytes,dc=com": {
+      "attrs": {
+        "objectClass": ["organization", "dcObject"],
+        "o": "craftedbytes.com"
+      },
+      "children": {
+        "ou=groups": {
+          "attrs": {
+            "objectClass": ["organizationalUnit"]
+          }
+        },
+        "ou=users": {
+          "attrs": {
+            "objectClass": ["organizationalUnit"]
+          }
+        }
+      }
+    }
+  }
+}

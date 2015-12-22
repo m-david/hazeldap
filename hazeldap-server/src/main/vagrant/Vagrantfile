@@ -1,0 +1,51 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure(2) do |config|
+
+  config.vm.box = 'precise64'
+  config.vm.box_url = 'http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box'
+
+  config.ssh.forward_agent = true
+
+  config.omnibus.chef_version = :latest
+  config.berkshelf.enabled = true
+  config.berkshelf.berksfile_path = "./Berksfile"
+
+  config.vm.network :public_network, :public_network => "en3: Thunderbolt Ethernet"
+
+  config.vm.network "forwarded_port", guest: 636, host: 1636
+  config.vm.network "forwarded_port", guest: 389, host: 1389
+
+  config.vm.provider 'virtualbox' do |vb|
+      vb.customize ['modifyvm', :id, "--name", "ldap", '--memory', '1024']
+  end
+
+  config.vm.provision "chef_solo" do |chef|
+    chef.add_recipe 'openldap::server'
+    #chef.add_recipe 'ca_openldap::dit'
+    #chef.add_recipe 'ca_openldap::populate'
+    #chef.data_bags_path = './data_bags'
+    chef.json = {
+      'openldap' => {
+        'basedn'      => 'dc=craftedbytes,dc=com',
+        'server'      => 'ldap.craftedbytes.com',
+        'rootpw'      => 'password',
+        'tls_enabled' => false
+      },
+      'ca_openldap' => {
+          'basedn'       => 'dc=craftedbytes,dc=com',
+          'rootdn'       => 'cn=admin',
+          'rootpassword' => 'password',
+          'tls' => {
+            'enable' => :no
+            }
+       }
+    }
+  end
+
+end

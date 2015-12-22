@@ -1,0 +1,53 @@
+{
+  "id": "populate",
+  "base": "dc=craftedbytes,dc=com",
+  "branches": [
+    {
+      "name": "ou=users",
+      "default_classes": ["top", "posixAccount", "inetOrgPerson"],
+      "entries": [
+        {
+          "dn": "uid=test1",
+          "uidNumber": "10001",
+          "uid": "test",
+          "cn": "test",
+          "sn": "person",
+          "gidNumber": "10001",
+          "userPassword": "password1",
+          "homeDirectory": "/home/test1"
+        },
+        {
+          "dn": "uid=test2",
+          "uidNumber": "10002",
+          "uid": "test2",
+          "cn": "test 2",
+          "sn": "person",
+          "gidNumber": "10002",
+          "userPassword": "password2",
+          "homeDirectory": "/home/test2"
+        }
+      ]
+    },
+    {
+      "name": "ou=groups",
+      "default_classes": ["top", "posixGroup"],
+      "entries": [
+        {
+          "dn": "cn=test_users",
+          "gidNumber": "10000",
+          "memberUid": ["test1", "test2"]
+        },
+        {
+          "dn": "cn=test1",
+          "gidNumber": "10001",
+          "memberUid": "test1"
+        },
+        {
+          "dn": "cn=test2",
+          "gidNumber": "10002",
+          "memberUid": "test2"
+        }
+      ]
+    }
+  ]
+}
