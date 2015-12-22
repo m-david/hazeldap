@@ -1,16 +1,21 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:ldap="http://www.springframework.org/schema/ldap"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                 http://www.springframework.org/schema/ldap
-                http://www.springframework.org/schema/ldap/spring-ldap.xsd">
+                http://www.springframework.org/schema/ldap/spring-ldap.xsd
+                http://www.springframework.org/schema/context
+                http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="instance" class="com.hazelcast.core.Hazelcast" factory-method="newHazelcastInstance">
+    <context:property-placeholder location="classpath:application-context.properties" />
+
+    <bean id="hazelcast.instance" class="com.hazelcast.core.Hazelcast" factory-method="newHazelcastInstance">
         <constructor-arg>
             <bean class="com.hazelcast.config.Config">
                 <property name="licenseKey"
-                          value="***REMOVED***"/>
+                          value="${hazelcast.license.key}"/>
                 <property name="properties">
                     <props>
                         <prop key="hazelcast.logging.type">jdk</prop>
@@ -18,8 +23,8 @@
                 </property>
                 <property name="groupConfig">
                     <bean class="com.hazelcast.config.GroupConfig">
-                        <property name="name" value="hazeldap"/>
-                        <property name="password" value="hazeldap-password"/>
+                        <property name="name" value="${hazelcast.group.config.name}"/>
+                        <property name="password" value="${hazelcast.group.config.password}"/>
                     </bean>
                 </property>
                 <property name="securityConfig">
@@ -74,10 +79,10 @@
     </bean>
 
     <ldap:context-source
-            url="ldap://localhost:10389"
-            base="dc=craftedbytes,dc=com"
-            username="uid=admin,ou=system"
-            password="password"/>
+            url="${ldap.url}"
+            base="${ldap.base}"
+            username="${ldap.username}"
+            password="${ldap.password}"/>
 
     <ldap:ldap-template id="ldapTemplate"/>
 

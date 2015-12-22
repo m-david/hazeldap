@@ -15,15 +15,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+/**
+ * An example JAAS LoginModule that makes use of a UserStore to authenticate and then provide groups.
+ */
 public class ClientLoginModule implements LoginModule {
 
     private final ILogger logger = Logger.getLogger(getClass().getName());
+
     private UsernamePasswordCredentials usernamePasswordCredentials;
     private Subject subject;
     private CallbackHandler callbackHandler;
     private UserStore userStore;
 
-    public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
+    public void initialize(Subject subject,
+                           CallbackHandler callbackHandler,
+                           Map<String, ?> sharedState,
+                           Map<String, ?> options) {
         this.subject = subject;
         this.callbackHandler = callbackHandler;
         this.userStore = (UserStore) options.get("userStore");
