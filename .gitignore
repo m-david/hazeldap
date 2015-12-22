@@ -1,0 +1,4 @@
+hazeldap-client/target
+hazeldap-server/target
+*.jar
+*.class
