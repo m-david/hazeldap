@@ -12,11 +12,6 @@ public class Bootstrap {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("application-context.xml");
 
         UserStore userStore = applicationContext.getBean("userStore", UserStore.class);
-        List<String> allPersonNames = userStore.getAllPersonNames();
-
-        for(String name:allPersonNames){
-            System.out.println(name);
-        }
 
         System.out.println(userStore.authenticate("dbrimley", "password"));
 
