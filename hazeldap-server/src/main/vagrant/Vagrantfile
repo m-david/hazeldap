@@ -25,27 +25,22 @@ Vagrant.configure(2) do |config|
       vb.customize ['modifyvm', :id, "--name", "ldap", '--memory', '1024']
   end
 
+  config.vm.synced_folder "ldif/", "/home/vagrant/ldif"
+
   config.vm.provision "chef_solo" do |chef|
     chef.add_recipe 'openldap::server'
-    #chef.add_recipe 'ca_openldap::dit'
-    #chef.add_recipe 'ca_openldap::populate'
-    #chef.data_bags_path = './data_bags'
     chef.json = {
       'openldap' => {
         'basedn'      => 'dc=craftedbytes,dc=com',
         'server'      => 'ldap.craftedbytes.com',
         'rootpw'      => 'password',
         'tls_enabled' => false
-      },
-      'ca_openldap' => {
-          'basedn'       => 'dc=craftedbytes,dc=com',
-          'rootdn'       => 'cn=admin',
-          'rootpassword' => 'password',
-          'tls' => {
-            'enable' => :no
-            }
-       }
+      }
     }
   end
+
+  config.vm.provision "shell",
+      inline: "ldapadd -x -D cn=admin,dc=craftedbytes,dc=com -w password -f ldif/usergroups.ldif"
+
 
 end
