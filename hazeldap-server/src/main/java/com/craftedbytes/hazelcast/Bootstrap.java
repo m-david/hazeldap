@@ -13,7 +13,7 @@ public class Bootstrap {
 
         UserStore userStore = applicationContext.getBean("userStore", UserStore.class);
 
-        System.out.println(userStore.authenticate("dbrimley", "password"));
+        System.out.println(userStore.authenticate("dbrimley", "password1"));
 
         System.out.println(userStore.authenticate("dbrimley","badPassword"));
 

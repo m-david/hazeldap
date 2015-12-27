@@ -35,12 +35,12 @@ public class Client {
         Map<String,String> readOnlyClientsImportantMap = readOnlyClient.getMap("importantMap");
 
         // This will pass
-        logger.log(Level.INFO,"Joe is performing get on the ImportantMap");
+        logger.log(Level.INFO,"-------------> Joe is performing get on the ImportantMap (Should Pass)");
         readOnlyClientsImportantMap.get("1");
 
         // This will fail as chris is not a member of the admin group
         try{
-            logger.log(Level.INFO,"Joe is performing put on the ImportantMap");
+            logger.log(Level.INFO,"-------------> Joe is performing put on the ImportantMap (Should Fail)");
             readOnlyClientsImportantMap.put("2","2");
         } catch (AccessControlException e){
             logger.log(Level.SEVERE,"Could not perform put operation, access denied",e);
@@ -54,7 +54,7 @@ public class Client {
         Map<String,String> adminClientsImportantMap = adminClient.getMap("importantMap");
 
         // This will pass
-        logger.log(Level.INFO,"David is performing put on the ImportantMap");
+        logger.log(Level.INFO,"-------------> David is performing put on the ImportantMap (Should Pass)");
         adminClientsImportantMap.put("1","1");
     }
 
