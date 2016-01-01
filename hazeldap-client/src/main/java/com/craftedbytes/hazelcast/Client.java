@@ -11,9 +11,6 @@ import java.security.AccessControlException;
 import java.util.Map;
 import java.util.logging.Level;
 
-/**
- * Created by dbrimley on 19/05/2014.
- */
 public class Client {
 
     private final ILogger logger = Logger.getLogger(getClass().getName());
@@ -38,7 +35,7 @@ public class Client {
         logger.log(Level.INFO,"-------------> Joe is performing get on the ImportantMap (Should Pass)");
         readOnlyClientsImportantMap.get("1");
 
-        // This will fail as chris is not a member of the admin group
+        // This will fail as Joe is not a member of the correct group.
         try{
             logger.log(Level.INFO,"-------------> Joe is performing put on the ImportantMap (Should Fail)");
             readOnlyClientsImportantMap.put("2","2");
