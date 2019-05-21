@@ -449,6 +449,25 @@ If you do set-up your own server you'll also have to edit the connection details
 
 I would recommend using [OpenLDAP](http://www.openldap.org/)
 
+###### Using Docker
+
+```
+$cd ./hazeldap-server/src/main/vagrant/ldif/
+$docker run -p 389:389 -p 636:636 --name my-openldap-container \
+  --env LDAP_ADMIN_PASSWORD="password" \
+   --env LDAP_DOMAIN="craftedbytes.com" \
+  --detach osixia/openldap:1.2.4
+
+$ldapadd -h localhost -p 389 -x -D cn=admin,dc=craftedbytes,dc=com -w password -f usergroups.ldif
+```
+
+Bind Dn:  cn=admin,dc=craftedbytes,dc=com
+
+##### Apache Directory Studio
+* Login with bind dn credentials above
+* Import ldif:  ./ldif/usergroups.ldif
+
+
 ### Client Credentials
 
 When a Client initially connects to a Hazelcast Cluster an optional [Credentials](http://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/security/Credentials.html) object can be passed.  The Credentials object carries mandatory information such as the Endpoint which is usually the IP Address of the client.  As Credentials are usually passed over the network between a client and a cluster it needs to be serialized.
