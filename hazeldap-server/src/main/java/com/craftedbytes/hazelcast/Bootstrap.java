@@ -1,5 +1,6 @@
 package com.craftedbytes.hazelcast;
 
+import com.hazelcast.core.HazelcastInstance;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.ApplicationContext;
 
@@ -18,6 +19,10 @@ public class Bootstrap {
         System.out.println(userStore.authenticate("dbrimley","badPassword"));
 
         System.out.println("dbrimley is a member of the following groups ->" + userStore.getRoles("dbrimley"));
+
+        HazelcastInstance hazelcastInstance = (HazelcastInstance) applicationContext.<HazelcastInstance>getBean("hazelcast.instance");
+
+        System.out.println(hazelcastInstance.getConfig());
     }
 
 }

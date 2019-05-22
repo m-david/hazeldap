@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * A UserStore that connects to an LDAP server by use of the Spring LdapTemplate
  */
+
 public class LdapUserStore implements UserStore {
 
     private LdapTemplate ldapTemplate;

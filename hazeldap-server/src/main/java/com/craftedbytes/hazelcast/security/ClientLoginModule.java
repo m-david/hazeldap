@@ -25,6 +25,7 @@ public class ClientLoginModule implements LoginModule {
     private UsernamePasswordCredentials usernamePasswordCredentials;
     private Subject subject;
     private CallbackHandler callbackHandler;
+
     private UserStore userStore;
 
     public void initialize(Subject subject,
@@ -34,6 +35,16 @@ public class ClientLoginModule implements LoginModule {
         this.subject = subject;
         this.callbackHandler = callbackHandler;
         this.userStore = (UserStore) options.get("userStore");
+    }
+
+    public void setUserStore(UserStore userStore)
+    {
+        this.userStore = userStore;
+    }
+
+    public UserStore getUserStore()
+    {
+        return userStore;
     }
 
     /**

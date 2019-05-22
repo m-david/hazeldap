@@ -3,3 +3,5 @@ hazeldap-server/target
 *.jar
 *.class
 target/
+.idea
+

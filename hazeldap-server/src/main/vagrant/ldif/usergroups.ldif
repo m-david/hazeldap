@@ -1,8 +1,8 @@
-dn: dc=craftedbytes,dc=com
-objectclass: dcObject
-objectclass: organization
-o: craftedbytes.com
-dc: craftedbytes
+#dn: dc=craftedbytes,dc=com
+#objectclass: dcObject
+#objectclass: organization
+#o: craftedbytes.com
+#dc: craftedbytes
 
 dn: ou=people,dc=craftedbytes,dc=com
 objectClass: organizationalUnit

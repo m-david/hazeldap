@@ -1,88 +1,112 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--<beans xmlns="http://www.springframework.org/schema/beans"></beans>-->
-<!--<beans>-->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:hz="http://www.hazelcast.com/schema/spring"
        xmlns:ldap="http://www.springframework.org/schema/ldap"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-              http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-              http://www.hazelcast.com/schema/spring
-              http://www.hazelcast.com/schema/spring/hazelcast-spring-3.11.xsd
-              http://www.springframework.org/schema/ldap
-              http://www.springframework.org/schema/ldap/spring-ldap.xsd
-              http://www.springframework.org/schema/context
-              http://www.springframework.org/schema/context/spring-context.xsd
-
-">
-
-
-    <!--    <context:config-scan base-package="com.hazelcast.poc"/>-->
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.springframework.org/schema/ldap
+                http://www.springframework.org/schema/ldap/spring-ldap.xsd
+                http://www.springframework.org/schema/context
+                http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:property-placeholder location="classpath:application-context.properties" />
 
-    <context:component-scan base-package="com.craftedbytes.hazelcast"/>
+    <bean id="hazelcast.instance" class="com.hazelcast.core.Hazelcast" factory-method="newHazelcastInstance">
+        <constructor-arg>
+            <bean class="com.hazelcast.config.Config">
+                <property name="licenseKey"
+                          value="${hazelcast.license.key}"/>
+                <property name="properties">
+                    <props>
+                        <prop key="hazelcast.logging.type">jdk</prop>
+                        <prop key="hazelcast.phone.home.enabled">faflse</prop>
+                    </props>
+                </property>
 
-    <hz:hazelcast id="hazelcast.instance" >
+                <property name="networkConfig">
+                    <bean class="com.hazelcast.config.NetworkConfig">
+                        <property name="port" value="5901"/>
+                        <property name="join">
+                            <bean class="com.hazelcast.config.JoinConfig">
+                                <property name="multicastConfig">
+                                    <bean class="com.hazelcast.config.MulticastConfig">
+                                        <property name="enabled" value="false"/>
+                                    </bean>
+                                </property>
+                                <property name="tcpIpConfig">
+                                    <bean class="com.hazelcast.config.TcpIpConfig">
+                                        <property name="enabled" value="true"/>
+                                        <property name="members">
+                                            <list>
+                                                <value>127.0.0.1:5901</value>
+                                            </list>
+                                        </property>
+                                    </bean>
+                                </property>
+                            </bean>
+                        </property>
 
-        <hz:config>
 
-            <hz:spring-aware/>
 
-            <hz:group name="dev-secure" password="this is ignored"/>
-            <hz:license-key>${hazelcast.license.key}</hz:license-key>
-            <hz:management-center enabled="true" url="http://localhost:8080/hazelcast-mancenter"/>
+                    </bean>
+                </property>
 
-            <hz:properties>
-                <hz:property name="hazelcast.logging.type">jdk</hz:property>
-                <hz:property name="hazelcast.phone.home.enabled">false</hz:property>
-            </hz:properties>
-
-            <hz:network port="5901" port-auto-increment="true">
-                <hz:join>
-                    <hz:multicast enabled="false"/>
-                    <hz:tcp-ip enabled="true">
-                        <hz:member>127.0.0.1:5901</hz:member>
-                    </hz:tcp-ip>
-                </hz:join>
-            </hz:network>
-
-            <hz:security enabled="true">
-                <hz:client-login-modules>
-
-                    <hz:login-module  class-name="com.craftedbytes.hazelcast.security.ClientLoginModule" usage="REQUIRED">
-
-                    <!--<hz:login-module implementation="clientLoginModule" usage="REQUIRED">-->
-                        <!-- class-name="com.craftedbytes.hazelcast.security.ClientLoginModule" -->
-
-                    </hz:login-module>
-
-                </hz:client-login-modules>
-
-                <hz:client-permissions>
-                    <hz:map-permission name="importantMap" principal="cn: StandardUsers">
-                        <hz:actions>
-                            <hz:action>create</hz:action>
-                            <hz:action>read</hz:action>
-                        </hz:actions>
-                    </hz:map-permission>
-                    <hz:map-permission name="importantMap" principal="cn: Administrator">
-                        <hz:actions>
-                            <hz:action>create</hz:action>
-                            <hz:action>destroy</hz:action>
-                            <hz:action>put</hz:action>
-                            <hz:action>read</hz:action>
-                        </hz:actions>
-                    </hz:map-permission>
-
-                </hz:client-permissions>
-            </hz:security>
-
-        </hz:config>
-    </hz:hazelcast>
+                <property name="groupConfig">
+                    <bean class="com.hazelcast.config.GroupConfig">
+                        <property name="name" value="${hazelcast.group.config.name}"/>
+                        <property name="password" value="${hazelcast.group.config.password}"/>
+                    </bean>
+                </property>
+                <property name="securityConfig">
+                    <bean class="com.hazelcast.config.SecurityConfig">
+                        <property name="enabled" value="true"/>
+                        <property name="clientLoginModuleConfigs">
+                            <list>
+                                <bean class="com.hazelcast.config.LoginModuleConfig">
+                                    <property name="className"
+                                              value="com.craftedbytes.hazelcast.security.ClientLoginModule"/>
+                                    <property name="usage" value="REQUIRED"/>
+                                    <property name="properties">
+                                        <map>
+                                            <entry key="userStore" value-ref="userStore"/>
+                                        </map>
+                                    </property>
+                                </bean>
+                            </list>
+                        </property>
+                        <property name="clientPermissionConfigs">
+                            <set>
+                                <bean class="com.hazelcast.config.PermissionConfig">
+                                    <property name="name" value="importantMap"/>
+                                    <property name="type" value="MAP"/>
+                                    <property name="principal" value="cn: StandardUsers"/>
+                                    <property name="actions">
+                                        <set>
+                                            <value>create</value>
+                                            <value>read</value>
+                                        </set>
+                                    </property>
+                                </bean>
+                                <bean class="com.hazelcast.config.PermissionConfig">
+                                    <property name="name" value="importantMap"/>
+                                    <property name="type" value="MAP"/>
+                                    <property name="principal" value="cn: Administrators"/>
+                                    <property name="actions">
+                                        <set>
+                                            <value>create</value>
+                                            <value>destroy</value>
+                                            <value>put</value>
+                                            <value>read</value>
+                                        </set>
+                                    </property>
+                                </bean>
+                            </set>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
 
     <ldap:context-source
             url="${ldap.url}"
@@ -96,8 +120,5 @@
         <property name="ldapTemplate" ref="ldapTemplate"/>
     </bean>
 
-    <bean id="clientLoginModule" class="com.craftedbytes.hazelcast.security.ClientLoginModule">
-        <property name="userStore" ref="userStore"/>
-    </bean>
 
 </beans>
