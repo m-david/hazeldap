@@ -5,16 +5,15 @@
 
   <properties>
     <property name="hazelcast.client.statistics.enabled">true</property>
-    <property name="hazelcast.application.validation.token">MyToken334</property>
+    <!--<property name="hazelcast.application.validation.token">MyToken334</property>-->
     <property name="hazelcast.client.heartbeat.timeout">1000</property>
     <property name="hazelcast.client.heartbeat.interval">200</property>
   </properties>
 
-<!--  <import resource="client-license-key.xml"/>-->
 
   <group>
-    <name>dev</name>
-    <password>dev-pass-ignored</password>
+    <name>hazeldap</name>
+    <password>hazeldap-password-ignored-check</password>
   </group>
 
   <network>
@@ -24,31 +23,8 @@
       <address>127.0.0.1:5902</address>
     </cluster-members>
 
-<!--    <ssl enabled="true">-->
-<!--      <factory-class-name>com.hazelcast.nio.ssl.BasicSSLContextFactory</factory-class-name>-->
-<!--      <properties>-->
-<!--        <property name="keyStore">./ssl/hazelcast.ks</property>-->
-<!--        <property name="keyStorePassword">password</property>-->
-<!--        <property name="mutualAuthentication">OPTIONAL</property>-->
-<!--        <property name="protocol">TLSv1.2</property>-->
-<!--        <property name="javax.net.ssl.trustStore">./ssl/hazelcast.ts</property>-->
-<!--      </properties>-->
-
-<!--    </ssl>-->
-
-
-    <smart-routing>true</smart-routing>
-    <redo-operation>true</redo-operation>
-    <connection-timeout>60000</connection-timeout>
-    <connection-attempt-period>3000</connection-attempt-period>
-    <connection-attempt-limit>2</connection-attempt-limit>
 
   </network>
 
-
-  <near-cache name="default">
-    <invalidate-on-change>true</invalidate-on-change>
-    <in-memory-format>OBJECT</in-memory-format>
-  </near-cache>
 
 </hazelcast-client>
