@@ -449,7 +449,7 @@ If you do set-up your own server you'll also have to edit the connection details
 
 I would recommend using [OpenLDAP](http://www.openldap.org/)
 
-###### Using Docker
+##### Using Docker
 
 If you don't have an LDAP Server or unable to run OpenLDAP above, you can always spin a docker image up as follows ...
 
