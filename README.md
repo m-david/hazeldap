@@ -451,6 +451,8 @@ I would recommend using [OpenLDAP](http://www.openldap.org/)
 
 ###### Using Docker
 
+If you don't have an LDAP Server or unable to run OpenLDAP above, you can always spin a docker image up as follows ...
+
 ```
 $cd ./hazeldap-server/src/main/vagrant/ldif/
 $docker run -p 389:389 -p 636:636 --name my-openldap-container \
