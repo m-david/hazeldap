@@ -1,5 +1,6 @@
 package com.craftedbytes.hazelcast;
 
+import com.hazelcast.client.AuthenticationException;
 import com.hazelcast.core.HazelcastInstance;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -8,8 +9,7 @@ import java.security.AccessControlException;
 import java.util.Map;
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class TestClient
 {
@@ -56,5 +56,25 @@ public class TestClient
         assertNotNull(adminClientsImportantMap.put("1","1"), "-------------> David is performing put on the ImportantMap (Should've Passed)");
 
     }
+
+    @Test
+    public void testInvalidUser() {
+
+        HazelcastInstance hazelcastInstance = null;
+        try {
+            hazelcastInstance = client.getClientConnection("invaliduser", "password1", "127.0.0.1");
+            fail("This is unexpected, should've have encountered exception");
+        }
+        catch(AuthenticationException e)
+        {
+            assertNotNull(e);
+        }
+        catch (IllegalStateException expected)
+        {
+            assertNotNull(expected);
+        }
+
+    }
+
 
 }
