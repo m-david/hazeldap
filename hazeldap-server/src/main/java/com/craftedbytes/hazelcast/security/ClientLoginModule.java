@@ -1,9 +1,11 @@
 package com.craftedbytes.hazelcast.security;
 
 import com.craftedbytes.hazelcast.UserStore;
+import com.craftedbytes.hazelcast.ldap.LdapUnboundIdUserStore;
 import com.hazelcast.logging.ILogger;
 import com.hazelcast.logging.Logger;
 import com.hazelcast.security.*;
+import com.unboundid.ldap.sdk.LDAPException;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -34,7 +36,26 @@ public class ClientLoginModule implements LoginModule {
                            Map<String, ?> options) {
         this.subject = subject;
         this.callbackHandler = callbackHandler;
-        this.userStore = (UserStore) options.get("userStore");
+        initializeFromOptions(options);
+    }
+
+    private void initializeFromOptions(Map<String, ?> options) {
+        ConnectionProperties connectionProperties = new ConnectionProperties((Map<String, String>)options);
+
+
+        try {
+            this.userStore = new LdapUnboundIdUserStore(
+                    connectionProperties.getHost(),
+                    connectionProperties.getPort(),
+                    connectionProperties.getBaseDn(),
+                    connectionProperties.getBindDn(),
+                    connectionProperties.getBindPassword(),
+                    connectionProperties.getMaxConnections());
+        }
+        catch (LDAPException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void setUserStore(UserStore userStore)
